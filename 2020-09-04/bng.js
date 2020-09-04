@@ -6,7 +6,13 @@ async function bng() {
     let bngProgram = await WebAssembly.instantiateStreaming(
         fetch("bng.wasm"),
         { js: { mem: memory, print: arg => console.log(arg) } });
-    bngProgram.instance.exports.bng();
+    let size = bngProgram.instance.exports.bng_size();
+    let width = bngProgram.instance.exports.bng_width();
+    let height = bngProgram.instance.exports.bng_height();
+    let imageData = new ImageData(new Uint8ClampedArray(memory.buffer).slice(12, 12 + size), width, height);
+    let canvas = document.querySelector("#bng");
+    let context = canvas.getContext("2d");
+    context.putImageData(imageData, 0, 0);
 }
 
 bng().catch((e) => console.log(e));

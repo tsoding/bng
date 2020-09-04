@@ -33,7 +33,7 @@
   - [ ] If we implement the image support in WASM can we make it feel like a native browser support
     - [x] [Implement png2bng](./png2bng.c)
     - [x] [Implement bngviewer](./bngviewer.c)
-    - [ ] Implement bng support in WASM
+    - [x] Implement bng support in WASM
       - [x] fetch("tsodinw.bng"):
         ```js
           fetch("./tsodinw.bng").then((x) => console.log(x.arrayBuffer()))
@@ -45,6 +45,6 @@
           let memory = new WebAssembly.Memory({initial: 10, maximum: 10});
           new Uint8Array(memory.buffer).set(new Uint8Array(fileData));
         ```
-      - [ ] Call a WASM function that turns the file into Image Data
-      - [ ] Take out the Image Data from WASM memory and display it
+      - [x] Call a WASM function that turns the file into Image Data
+      - [x] Take out the Image Data from WASM memory and display it
     - [ ] Add more interesting features to bng to test the support
