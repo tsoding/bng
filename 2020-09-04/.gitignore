@@ -1,4 +1,6 @@
 a.out
 prime
+png2bng
+bngviewer
 *.wasm
 *.bng

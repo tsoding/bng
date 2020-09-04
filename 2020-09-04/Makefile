@@ -1,4 +1,7 @@
-all: prime prime.wasm png2bng tsodinw.bng
+BNGVIEWER_CFLAGS=$(shell pkg-config --cflags sdl2)
+BNGVIEWER_LIBS=$(shell pkg-config --libs sdl2)
+
+all: prime prime.wasm png2bng tsodinw.bng bngviewer
 
 prime: prime.c
 	$(CC) -O3 -o prime prime.c
@@ -11,3 +14,6 @@ png2bng: png2bng.c bng.h stb_image.h
 
 tsodinw.bng: png2bng tsodinw.png
 	./png2bng
+
+bngviewer: bngviewer.c bng.h
+	$(CC) $(BNGVIEWER_CFLAGS) -O3 -o bngviewer bngviewer.c $(BNGVIEWER_LIBS)

@@ -32,6 +32,6 @@
 - [ ] Idea: Let's imagine we invented a new image format that didn't exist before
   - [ ] If we implement the image support in WASM can we make it feel like a native browser support
     - [x] [Implement png2bng](./png2bng.c)
-    - [ ] Implement bngviewer
+    - [x] [Implement bngviewer](./bngviewer.c)
     - [ ] Implement bng support in WASM
     - [ ] Add more interesting features to bng to test the support
