@@ -34,8 +34,17 @@
     - [x] [Implement png2bng](./png2bng.c)
     - [x] [Implement bngviewer](./bngviewer.c)
     - [ ] Implement bng support in WASM
-      - [ ] fetch("tsodinw.bng")
-      - [ ] Put the fetched file into WASM memory
+      - [x] fetch("tsodinw.bng"):
+        ```js
+          fetch("./tsodinw.bng").then((x) => console.log(x.arrayBuffer()))
+        ```
+      - [x] Put the fetched file into WASM memory
+        ```js
+          let bngFile = await fetch("tsodinw.bng");
+          let fileData = await bngFile.arrayBuffer();
+          let memory = new WebAssembly.Memory({initial: 10, maximum: 10});
+          new Uint8Array(memory.buffer).set(new Uint8Array(fileData));
+        ```
       - [ ] Call a WASM function that turns the file into Image Data
       - [ ] Take out the Image Data from WASM memory and display it
     - [ ] Add more interesting features to bng to test the support
