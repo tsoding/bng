@@ -34,4 +34,8 @@
     - [x] [Implement png2bng](./png2bng.c)
     - [x] [Implement bngviewer](./bngviewer.c)
     - [ ] Implement bng support in WASM
+      - [ ] fetch("tsodinw.bng")
+      - [ ] Put the fetched file into WASM memory
+      - [ ] Call a WASM function that turns the file into Image Data
+      - [ ] Take out the Image Data from WASM memory and display it
     - [ ] Add more interesting features to bng to test the support
