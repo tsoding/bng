@@ -31,6 +31,13 @@ struct Bng *bng_load(const char *filepath)
 
 int main(int argc, char *argv[])
 {
+    if (argc < 2) {
+        fprintf(stderr, "./bngviewer <input.bng>");
+        exit(1);
+    }
+
+    const char *input_filepath = argv[1];
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window =
@@ -45,7 +52,7 @@ int main(int argc, char *argv[])
                 window, -1,
                 SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
-    struct Bng *bng = bng_load("tsodinw.bng");
+    struct Bng *bng = bng_load(input_filepath);
 
     SDL_Surface* image_surface =
         SDL_CreateRGBSurfaceFrom(bng->pixels,
