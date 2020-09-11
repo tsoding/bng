@@ -17,7 +17,16 @@ void* read_whole_file(const char *filename)
 
 struct Bng *bng_load(const char *filepath)
 {
-    return read_whole_file(filepath);
+    struct Bng *bng = read_whole_file(filepath);
+
+    for (size_t i = 0; i < bng->width * bng->height; ++i) {
+        bng->pixels[i] = convert_pixel(
+            bng->pixels[i],
+            bng->pixel_format,
+            RGBA);
+    }
+
+    return bng;
 }
 
 int main(int argc, char *argv[])
@@ -39,7 +48,7 @@ int main(int argc, char *argv[])
     struct Bng *bng = bng_load("tsodinw.bng");
 
     SDL_Surface* image_surface =
-        SDL_CreateRGBSurfaceFrom(bng->data,
+        SDL_CreateRGBSurfaceFrom(bng->pixels,
                                  bng->width,
                                  bng->height,
                                  32,

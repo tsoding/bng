@@ -7,7 +7,7 @@ png2bng: png2bng.c bng.h stb_image.h
 	$(CC) -O3 -o png2bng png2bng.c -lm
 
 tsodinw.bng: png2bng tsodinw.png
-	./png2bng tsodinw.png tsodinw.bng
+	./png2bng tsodinw.png tsodinw.bng RAGB
 
 bngviewer: bngviewer.c bng.h
 	$(CC) $(BNGVIEWER_CFLAGS) -O3 -o bngviewer bngviewer.c $(BNGVIEWER_LIBS)
