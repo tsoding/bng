@@ -22,6 +22,6 @@
       - [x] Call a WASM function that turns the file into Image Data
       - [x] Take out the Image Data from WASM memory and display it
     - [ ] Add more interesting features to bng to test the support
-      - [ ] Different pixel formats
+      - [x] Different pixel formats
       - [ ] Different compressions
     - [ ] Reusable BNG library that works both natively and being compiled to WASM
