@@ -14,3 +14,11 @@ bngviewer: bngviewer.c bng.h
 
 bng.wasm: bng.wat
 	wat2wasm bng.wat
+
+.PHONY: test
+
+test: png2bng_test
+	./png2bng_test
+
+png2bng_test: png2bng.c bng.h stb_image.h
+	$(CC) -O3 -DTEST -o png2bng_test png2bng.c -lm
