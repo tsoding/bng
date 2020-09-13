@@ -6,4 +6,4 @@ bng_test
 bngviewer
 *.wasm
 *.bng
-bng.wat
+*.wat

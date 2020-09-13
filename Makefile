@@ -20,8 +20,8 @@ bngviewer: bngviewer.c bng.h
 bng.wasm: bng.wat
 	wat2wasm bng.wat
 
-bng.wat: bng.in.wat
-	cpp -P bng.in.wat > bng.wat
+bng.wat: bng.wat.in
+	cpp -P bng.wat.in > bng.wat
 
 .PHONY: test
 test: bng_test
