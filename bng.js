@@ -8,6 +8,7 @@ function setImageDataToCanvas(imageData, canvasId)
 }
 
 async function bng(imageFileName) {
+    // TODO(#4): keep bng.wasm as a byte array of bng.js
     let bngFile = await fetch(imageFileName);
     let fileData = await bngFile.arrayBuffer();
     // TODO: allocate WebAssembly memory based on the file size
