@@ -1,16 +1,21 @@
-BNGVIEWER_CFLAGS=$(shell pkg-config --cflags sdl2)
+BNGVIEWER_CFLAGS=$(shell pkg-config --cflags sdl2) -ggdb 
 BNGVIEWER_LIBS=$(shell pkg-config --libs sdl2)
 
+PNG2BNG_CFLAGS=-ggdb 
+
+BNG_TEST_CFLAGS=-ggdb
+
+.PHONY: all
 all: png2bng tsodinw.bng bngviewer bng.wasm
 
 png2bng: png2bng.c bng.h stb_image.h
-	$(CC) -O3 -o png2bng png2bng.c -lm
+	$(CC) $(PNG2BNG_CFLAGS) -o png2bng png2bng.c -lm
 
 tsodinw.bng: png2bng tsodinw.png
 	./png2bng tsodinw.png tsodinw.bng GRAB
 
 bngviewer: bngviewer.c bng.h
-	$(CC) $(BNGVIEWER_CFLAGS) -O3 -o bngviewer bngviewer.c $(BNGVIEWER_LIBS)
+	$(CC) $(BNGVIEWER_CFLAGS) -o bngviewer bngviewer.c $(BNGVIEWER_LIBS)
 
 bng.wasm: bng.wat
 	wat2wasm bng.wat
@@ -19,9 +24,8 @@ bng.wat: bng.in.wat
 	cpp -P bng.in.wat > bng.wat
 
 .PHONY: test
+test: bng_test
+	./bng_test
 
-test: png2bng_test
-	./png2bng_test
-
-png2bng_test: png2bng.c bng.h stb_image.h
-	$(CC) -O3 -DTEST -o png2bng_test png2bng.c -lm
+bng_test: bng_test.c bng.h stb_image.h
+	$(CC) $(BNG_TEST_CFLAGS) -o bng_test bng_test.c -lm

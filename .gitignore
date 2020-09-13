@@ -2,6 +2,7 @@ a.out
 prime
 png2bng
 png2bng_test
+bng_test
 bngviewer
 *.wasm
 *.bng

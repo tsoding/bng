@@ -6,7 +6,8 @@
 #if defined(__GNUC__) || defined(__clang__)
 #  define PACKED __attribute__((packed))
 #else
-#  warning "Packed attributes for struct is not implemented for this compiler. Feel free to fix that and submit a Pull Request to https://github.com/tsoding/bng"
+#  warning "Packed attributes for struct is not implemented for this compiler. This may result in a program working incorrectly. Feel free to fix that and submit a Pull Request to https://github.com/tsoding/bng"
+#  define PACKED
 #endif
 
 struct Bng_Pixel_Format
@@ -28,6 +29,54 @@ int bng_pixel_format_equals(struct Bng_Pixel_Format a, struct Bng_Pixel_Format b
 const struct Bng_Pixel_Format RGBA = {0, 1, 2, 3};
 const struct Bng_Pixel_Format ABGR = {3, 2, 1, 0};
 const struct Bng_Pixel_Format GRAB = {1, 0, 3, 2};
+
+struct Bng_Pixel_Format_Name
+{
+    char cstr[5];
+};
+
+struct Bng_Pixel_Format_Name name_of_pixel_format(struct Bng_Pixel_Format format)
+{
+    struct Bng_Pixel_Format_Name name = {0};
+    // BTW: if sizeof(Bng_Pixel_Format) was 1 I would not have to do these asserts, because then
+    // the values of byte indices could not be physically equal or greater than 4.
+    assert(format.red_byte < 4);
+    name.cstr[format.red_byte] = 'R';
+    assert(format.green_byte < 4);
+    name.cstr[format.green_byte] = 'G';
+    assert(format.blue_byte < 4);
+    name.cstr[format.blue_byte] = 'B';
+    assert(format.alpha_byte < 4);
+    name.cstr[format.alpha_byte] = 'A';
+    return name;
+}
+
+struct Bng_Pixel_Format pixel_format_by_name(const char *name)
+{
+    struct Bng_Pixel_Format result = {0};
+    size_t n = strlen(name);
+    if (n > 4) n = 4;
+
+    for (size_t i = 0; i < n; ++i) {
+        switch (name[i]) {
+        case 'R':
+            result.red_byte = i;
+            break;
+        case 'G':
+            result.green_byte = i;
+            break;
+        case 'B':
+            result.blue_byte = i;
+            break;
+        case 'A':
+            result.alpha_byte = i;
+            break;
+        default: {}
+        }
+    }
+
+    return result;
+}
 
 struct Bng
 {
