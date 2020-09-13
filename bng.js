@@ -11,7 +11,7 @@ async function bng(imageFileName) {
     // TODO(#4): keep bng.wasm as a byte array of bng.js
     let bngFile = await fetch(imageFileName);
     let fileData = await bngFile.arrayBuffer();
-    // TODO: allocate WebAssembly memory based on the file size
+    // TODO(#5): allocate WebAssembly memory based on the file size
     let memory = new WebAssembly.Memory({initial: 300, maximum: 1000});
     new Uint8Array(memory.buffer).set(new Uint8Array(fileData));
     let bngProgram = await WebAssembly.instantiateStreaming(
