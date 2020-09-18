@@ -1,7 +1,11 @@
 #define WIDTH_OFFSET 4
 #define HEIGHT_OFFSET 8
 #define PIXEL_FORMAT_OFFSET 12
-#define DATA_OFFSET 16
+#define PAIRS_COUNT_OFFSET 16
+#define PAIRS_OFFSET 20
+
+#define PIXEL_SIZE 4
+#define PAIR_SIZE 8
 
 (module
  (memory (import "js" "mem") 1)
@@ -60,10 +64,40 @@
                               (i32.load8_u (i32.add (i32.const PIXEL_FORMAT_OFFSET)
                                                     (i32.const 3))))))
        (get_local $result))
+ (func $decompress_pixels
+       (param $pairs_ptr i32)
+       (param $pairs_count i32)
+       (param $pixels_ptr i32)
+       (block
+        $exit
+        (loop
+         $repeat
+         (br_if $exit (i32.eqz (get_local $pairs_count)))
+
+         (block
+          $exit_inner
+          (loop
+           $repeat_inner
+           (br_if $exit_inner (i32.eqz (i32.load (get_local $pairs_ptr))))
+
+           (i32.store (get_local $pixels_ptr)
+                      (i32.load (i32.add (get_local $pairs_ptr) (i32.const PIXEL_SIZE))))
+           (set_local $pixels_ptr (i32.add (get_local $pixels_ptr) (i32.const PIXEL_SIZE)))
+
+           (i32.store (get_local $pairs_ptr)
+                      (i32.sub (i32.load (get_local $pairs_ptr)) (i32.const 1)))
+           (br $repeat_inner)))
+         (set_local $pairs_count (i32.sub (get_local $pairs_count) (i32.const 1)))
+         (set_local $pairs_ptr (i32.add (get_local $pairs_ptr) (i32.const PAIR_SIZE)))
+         (br $repeat))))
  (func (export "bng_process")
        (local $index i32)
        (local $count i32)
        (local $address i32)
+       (call $decompress_pixels
+             (i32.const PAIRS_OFFSET)
+             (i32.load (i32.const PAIRS_COUNT_OFFSET))
+             (call $bng_offset))
        (set_local $count (i32.mul (call $bng_width) (call $bng_height)))
        (block
         $exit
@@ -74,16 +108,18 @@
                        (get_local $count)))
          (set_local $address
                     (i32.add
-                     (i32.const DATA_OFFSET)
+                     (call $bng_offset)
                      (i32.mul
                       (get_local $index)
-                      (i32.const 4))))
+                      (i32.const PIXEL_SIZE))))
          (i32.store (get_local $address) (call $convert_pixel (i32.load (get_local $address))))
          (set_local $index (i32.add (get_local $index) (i32.const 1)))
          (br $repeat))))
- (func (export "bng_offset")
+ (func $bng_offset (export "bng_offset")
        (result i32)
-       (i32.const DATA_OFFSET))
+       (i32.add (i32.const PAIRS_OFFSET)
+                (i32.mul (i32.load (i32.const PAIRS_COUNT_OFFSET))
+                         (i32.const PAIR_SIZE))))
  (func $bng_width (export "bng_width")
        (result i32)
        (i32.load (i32.const WIDTH_OFFSET)))
@@ -96,4 +132,4 @@
         (i32.mul
          (call $bng_width)
          (call $bng_height))
-        (i32.const 4))))
+        (i32.const PIXEL_SIZE))))
