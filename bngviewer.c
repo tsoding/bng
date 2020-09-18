@@ -15,18 +15,21 @@ void* read_whole_file(const char *filename)
     return data;
 }
 
-struct Bng *bng_load(const char *filepath)
+uint32_t *bng_load(const char *filepath, uint32_t *width, uint32_t *height)
 {
-    struct Bng *bng = read_whole_file(filepath);
+    struct RLE_Compressed_Bng *compressed_bng = read_whole_file(filepath);
 
-    for (size_t i = 0; i < bng->width * bng->height; ++i) {
-        bng->pixels[i] = convert_pixel(
-            bng->pixels[i],
-            bng->pixel_format,
-            RGBA);
+    uint32_t *pixels = malloc(compressed_bng->width * compressed_bng->height * sizeof(uint32_t));
+    decompress_pixels(compressed_bng->pairs, compressed_bng->pairs_count, pixels);
+
+    for (size_t i = 0; i < compressed_bng->width * compressed_bng->height; ++i) {
+        pixels[i] = convert_pixel(pixels[i], compressed_bng->pixel_format, RGBA);
     }
 
-    return bng;
+    *width = compressed_bng->width;
+    *height = compressed_bng->height;
+
+    return pixels;
 }
 
 int main(int argc, char *argv[])
@@ -52,14 +55,15 @@ int main(int argc, char *argv[])
                 window, -1,
                 SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
-    struct Bng *bng = bng_load(input_filepath);
+    uint32_t width, height;
+    uint32_t *pixels = bng_load(input_filepath, &width, &height);
 
     SDL_Surface* image_surface =
-        SDL_CreateRGBSurfaceFrom(bng->pixels,
-                                 bng->width,
-                                 bng->height,
+        SDL_CreateRGBSurfaceFrom(pixels,
+                                 width,
+                                 height,
                                  32,
-                                 bng->width * 4,
+                                 width * 4,
                                  0x000000FF,
                                  0x0000FF00,
                                  0x00FF0000,
@@ -80,7 +84,7 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
-        SDL_Rect rect = {0, 0, bng->width, bng->height};
+        SDL_Rect rect = {0, 0, width, height};
 
         SDL_RenderCopy(renderer, texture, &rect, &rect);
         SDL_RenderPresent(renderer);

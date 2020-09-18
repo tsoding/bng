@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     uint32_t *data = (uint32_t*)stbi_load(input_filepath, &x, &y, &n, 4);
     assert(data != NULL);
 
-    struct Bng bng = {
+    struct RLE_Compressed_Bng bng = {
         .magic        = BNG_MAGIC,
         .width        = x,
         .height       = y,
@@ -28,9 +28,12 @@ int main(int argc, char **argv)
         data[i] = convert_pixel(data[i], RGBA, desired_format);
     }
 
+    struct RLE_Pair *pairs = malloc(sizeof(struct RLE_Pair) * bng.width * bng.height);
+    bng.pairs_count = compress_pixels(bng.width, bng.height, data, pairs);
+
     FILE *out = fopen(output_filepath, "wb");
     fwrite(&bng, 1, sizeof(bng), out);
-    fwrite(data, 1, x * y * 4, out);
+    fwrite(pairs, 1, bng.pairs_count * sizeof(struct RLE_Pair), out);
     fclose(out);
 
     return 0;

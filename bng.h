@@ -78,6 +78,22 @@ struct Bng_Pixel_Format pixel_format_by_name(const char *name)
     return result;
 }
 
+struct RLE_Pair
+{
+    uint32_t count;
+    uint32_t pixel;
+};
+
+struct RLE_Compressed_Bng
+{
+    uint32_t magic;
+    uint32_t width;
+    uint32_t height;
+    struct Bng_Pixel_Format pixel_format;
+    uint32_t pairs_count;
+    struct RLE_Pair pairs[];
+} PACKED;
+
 struct Bng
 {
     uint32_t magic;
@@ -86,6 +102,36 @@ struct Bng
     struct Bng_Pixel_Format pixel_format;
     uint32_t pixels[];
 } PACKED;
+
+// NOTE: You have to allocate `width * height` amount of pixels
+void decompress_pixels(struct RLE_Pair *pairs, uint32_t pairs_count, uint32_t *pixels)
+{
+    size_t pixels_count = 0;
+    for (uint32_t i = 0; i < pairs_count; ++i) {
+        for (uint32_t j = 0; j < pairs[i].count; ++j) {
+            pixels[pixels_count++] = pairs[i].pixel;
+        }
+    }
+}
+
+// NOTE: You have to allocate `width * height` amount of pairs
+uint32_t compress_pixels(uint32_t width, uint32_t height, uint32_t *pixels, struct RLE_Pair *pairs)
+{
+    uint32_t pairs_count = 0;
+    const uint32_t n = width * height;
+
+    for (uint32_t i = 0; i < n; ++i) {
+        if (pairs_count > 0 && pairs[pairs_count - 1].pixel == pixels[i]) {
+            pairs[pairs_count - 1].count += 1;
+        } else {
+            pairs_count += 1;
+            pairs[pairs_count - 1].count = 1;
+            pairs[pairs_count - 1].pixel = pixels[i];
+        }
+    }
+
+    return pairs_count;
+}
 
 #define GET_BYTE(bytes, index) ((bytes & (0xFF << ((4 - index - 1) * 8))) >> ((4 - index - 1) * 8))
 #define SET_BYTE(bytes, index, byte) bytes = (bytes | (byte << ((4 - index - 1) * 8)))
