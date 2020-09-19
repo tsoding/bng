@@ -35,5 +35,6 @@ $ iexplorer.exe http://localhost:8080/bng.html
       - [x] Different pixel formats
       - [x] Different compressions
     - [ ] Reusable BNG library that works both natively and being compiled to WASM
+      - [ ] Check out this article: https://surma.dev/things/c-to-webassembly/
     - [ ] img tag integration
       - [ ] Check out object URLs: https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
