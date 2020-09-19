@@ -1,5 +1,15 @@
 # Extending Native Browser Capabilities with WebAssembly
 
+## Quick Start
+
+```console
+$ make -B
+$ python -m SimpleHTTPServer 8080
+$ iexplorer.exe http://localhost:8080/
+```
+
+## Research Notes
+
 - [x] Premise: Performance of WASM is probably comparable to native code
   - [x] Let's check it by implementing a Prime Number Crunching as a "Benchmark":
     - [x] https://github.com/tsoding/prime-benchmark
@@ -21,7 +31,9 @@
         ```
       - [x] Call a WASM function that turns the file into Image Data
       - [x] Take out the Image Data from WASM memory and display it
-    - [ ] Add more interesting features to bng to test the support
+    - [x] Add more interesting features to bng to test the support
       - [x] Different pixel formats
-      - [ ] Different compressions
+      - [x] Different compressions
     - [ ] Reusable BNG library that works both natively and being compiled to WASM
+    - [ ] img tag integration
+      - [ ] Check out object URLs: https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
