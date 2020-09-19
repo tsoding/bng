@@ -5,7 +5,7 @@
 ```console
 $ make -B
 $ python -m SimpleHTTPServer 8080
-$ iexplorer.exe http://localhost:8080/
+$ iexplorer.exe http://localhost:8080/bng.html
 ```
 
 ## Research Notes
