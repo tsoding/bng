@@ -27,8 +27,29 @@ int bng_pixel_format_equals(struct Bng_Pixel_Format a, struct Bng_Pixel_Format b
 }
 
 const struct Bng_Pixel_Format RGBA = {0, 1, 2, 3};
+const struct Bng_Pixel_Format GRBA = {1, 0, 2, 3};
+const struct Bng_Pixel_Format BGRA = {2, 1, 0, 3};
+const struct Bng_Pixel_Format GBRA = {1, 2, 0, 3};
+const struct Bng_Pixel_Format BRGA = {2, 0, 1, 3};
+const struct Bng_Pixel_Format RBGA = {0, 2, 1, 3};
 const struct Bng_Pixel_Format ABGR = {3, 2, 1, 0};
+const struct Bng_Pixel_Format BAGR = {2, 3, 1, 0};
+const struct Bng_Pixel_Format BGAR = {2, 1, 3, 0};
+const struct Bng_Pixel_Format AGBR = {3, 1, 2, 0};
+const struct Bng_Pixel_Format GABR = {1, 3, 2, 0};
+const struct Bng_Pixel_Format GBAR = {1, 2, 3, 0};
+const struct Bng_Pixel_Format ARGB = {3, 0, 1, 2};
+const struct Bng_Pixel_Format RAGB = {0, 3, 1, 2};
+const struct Bng_Pixel_Format RGAB = {0, 1, 3, 2};
+const struct Bng_Pixel_Format AGRB = {3, 1, 0, 2};
+const struct Bng_Pixel_Format GARB = {1, 3, 0, 2};
 const struct Bng_Pixel_Format GRAB = {1, 0, 3, 2};
+const struct Bng_Pixel_Format ARBG = {3, 0, 2, 1};
+const struct Bng_Pixel_Format RABG = {0, 3, 2, 1};
+const struct Bng_Pixel_Format RBAG = {0, 2, 3, 1};
+const struct Bng_Pixel_Format ABRG = {3, 2, 0, 1};
+const struct Bng_Pixel_Format BARG = {2, 3, 0, 1};
+const struct Bng_Pixel_Format BRAG = {2, 0, 3, 1};
 
 struct Bng_Pixel_Format_Name
 {
