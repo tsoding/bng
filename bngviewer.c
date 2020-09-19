@@ -17,7 +17,7 @@ void* read_whole_file(const char *filename)
 
 uint32_t *bng_load(const char *filepath, uint32_t *width, uint32_t *height)
 {
-    struct RLE_Compressed_Bng *compressed_bng = read_whole_file(filepath);
+    struct Bng *compressed_bng = read_whole_file(filepath);
 
     uint32_t *pixels = malloc(compressed_bng->width * compressed_bng->height * sizeof(uint32_t));
     decompress_pixels(compressed_bng->pairs, compressed_bng->pairs_count, pixels);

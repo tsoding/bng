@@ -84,7 +84,7 @@ struct RLE_Pair
     uint32_t pixel;
 };
 
-struct RLE_Compressed_Bng
+struct Bng
 {
     uint32_t magic;
     uint32_t width;
@@ -92,15 +92,6 @@ struct RLE_Compressed_Bng
     struct Bng_Pixel_Format pixel_format;
     uint32_t pairs_count;
     struct RLE_Pair pairs[];
-} PACKED;
-
-struct Bng
-{
-    uint32_t magic;
-    uint32_t width;
-    uint32_t height;
-    struct Bng_Pixel_Format pixel_format;
-    uint32_t pixels[];
 } PACKED;
 
 // NOTE: You have to allocate `width * height` amount of pixels

@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     uint32_t *data = (uint32_t*)stbi_load(input_filepath, &x, &y, &n, 4);
     assert(data != NULL);
 
-    struct RLE_Compressed_Bng bng = {
+    struct Bng bng = {
         .magic        = BNG_MAGIC,
         .width        = x,
         .height       = y,
